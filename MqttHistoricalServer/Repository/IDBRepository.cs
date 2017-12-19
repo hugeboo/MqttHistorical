@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using MqttHistoricalUtils.Data;
+
 namespace MqttHistoricalServer.Repository
 {
-    internal interface IRepository
+    internal interface IDBRepository
     {
         #region Работа с пользователями
 
@@ -58,6 +60,13 @@ namespace MqttHistoricalServer.Repository
         /// <param name="userName">Имя пользователя</param>
         /// <returns>Список подключений</returns>
         IEnumerable<Connection> GetConnections(string userName);
+
+        /// <summary>
+        /// Получить все подключения пользователя
+        /// </summary>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <returns>Список подключений</returns>
+        IEnumerable<Connection> GetConnections(int userId);
 
         /// <summary>
         /// Получить подключение по идентификатору

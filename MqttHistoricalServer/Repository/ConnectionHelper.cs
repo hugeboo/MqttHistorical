@@ -6,19 +6,12 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 
+using MqttHistoricalUtils.Data;
+
 namespace MqttHistoricalServer.Repository
 {
-    internal sealed class Connection
+    internal static class ConnectionHelper
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public string Server { get; set; }
-        public string ConnectionUser { get; set; }
-        public string Password { get; set; }
-        public int Port { get; set; }
-        public int SSLPort { get; set; }
-        public bool UseSSL { get; set; }
-
         public static Connection Read(SqlDataReader dr)
         {
             var con = new Connection();
@@ -30,13 +23,14 @@ namespace MqttHistoricalServer.Repository
             con.Port = SqlHelper.GetInt(dr, "Port") ?? 0;
             con.SSLPort = SqlHelper.GetInt(dr, "SSLPort") ?? 0;
             con.UseSSL = SqlHelper.GetBool(dr, "UseSSL") ?? false;
+            con.Enabled = SqlHelper.GetBool(dr, "Enabled") ?? false;
             return con;
         }
 
         public static void Insert(SqlConnection c, Connection con)
         {
-            var cmd = new SqlCommand("INSERT INTO [Connections] ([UserId], [Server], [ConnectionUser], [Password], [Port], [SSLPort], [UseSSL]) " +
-                "VALUES (@USERID,@SERVER,@CUSER,@PASS,@PORT,@SSLPORT,@USESSL)", c);
+            var cmd = new SqlCommand("INSERT INTO [Connections] ([UserId], [Server], [ConnectionUser], [Password], [Port], [SSLPort], [UseSSL], [Enabled]) " +
+                "VALUES (@USERID,@SERVER,@CUSER,@PASS,@PORT,@SSLPORT,@USESSL,@ENAB)", c);
             cmd.Parameters.Add(SqlHelper.CreateParam("@USERID", con.UserId));
             cmd.Parameters.Add(SqlHelper.CreateParam("@SERVER", con.Server));
             cmd.Parameters.Add(SqlHelper.CreateParam("@CUSER", con.ConnectionUser));
@@ -44,6 +38,7 @@ namespace MqttHistoricalServer.Repository
             cmd.Parameters.Add(SqlHelper.CreateParam("@PORT", con.Port));
             cmd.Parameters.Add(SqlHelper.CreateParam("@SSLPORT", con.SSLPort));
             cmd.Parameters.Add(SqlHelper.CreateParam("@USESSL", con.UseSSL));
+            cmd.Parameters.Add(SqlHelper.CreateParam("@ENAB", con.Enabled));
             cmd.ExecuteNonQuery();
         }
 
@@ -52,6 +47,21 @@ namespace MqttHistoricalServer.Repository
             var lst = new List<Connection>();
             var cmd = new SqlCommand("SELECT [Connections].* FROM [Connections], [Users] WHERE [Users].[Name]=@USN AND [Users].[Id]=[Connections].[UserId]", c);
             cmd.Parameters.Add(SqlHelper.CreateParam("@USN", userName));
+            using (var dr = cmd.ExecuteReader())
+            {
+                while (dr.Read())
+                {
+                    lst.Add(Read(dr));
+                }
+            }
+            return lst;
+        }
+
+        public static IEnumerable<Connection> SelectAllByUser(SqlConnection c, int userId)
+        {
+            var lst = new List<Connection>();
+            var cmd = new SqlCommand("SELECT * FROM [Connections] WHERE [UserId]=@USID", c);
+            cmd.Parameters.Add(SqlHelper.CreateParam("@USID", userId));
             using (var dr = cmd.ExecuteReader())
             {
                 while (dr.Read())

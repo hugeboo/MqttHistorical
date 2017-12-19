@@ -40,19 +40,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBAdminWebServer.cs" />
     <Compile Include="DBWebServer.cs" />
     <Compile Include="DBWebServerSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\Connection.cs" />
-    <Compile Include="Repository\IRepository.cs" />
-    <Compile Include="Repository\Payload.cs" />
-    <Compile Include="Repository\SQLRepositorySettings.cs" />
+    <Compile Include="Repository\ConnectionHelper.cs" />
+    <Compile Include="Repository\IDBRepository.cs" />
+    <Compile Include="Repository\PayloadHelper.cs" />
+    <Compile Include="Repository\SQLDBRepositorySettings.cs" />
     <Compile Include="Repository\SqlHelper.cs" />
-    <Compile Include="Repository\SQLRepository.cs" />
-    <Compile Include="Repository\Subscription.cs" />
-    <Compile Include="Repository\Topic.cs" />
-    <Compile Include="Repository\User.cs" />
+    <Compile Include="Repository\SQLDBRepository.cs" />
+    <Compile Include="Repository\SubscriptionHelper.cs" />
+    <Compile Include="Repository\TopicHelper.cs" />
+    <Compile Include="Repository\UserHelper.cs" />
+    <Compile Include="RequestProcessors\GetConnectionsRequestProcessor.cs" />
     <Compile Include="RequestProcessors\GetPayloadsRequestProcessor.cs" />
+    <Compile Include="RequestProcessors\GetSubscriptionsRequestProcessor.cs" />
+    <Compile Include="RequestProcessors\GetUsersRequestProcessor.cs" />
     <Compile Include="RequestProcessors\PostPayloadsRequestProcessor.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 
+using MqttHistoricalUtils.Data;
+
 namespace MqttHistoricalServer.Repository
 {
-    internal sealed class Subscription
+    internal static class SubscriptionHelper
     {
-        public int Id { get; set; }
-        public int ConnectionId { get; set; }
-        public string TopicFilter { get; set; }
-        public int QoS { get; set; }
-
         public static Subscription Read(SqlDataReader dr)
         {
             var s = new Subscription();
@@ -22,16 +19,18 @@ namespace MqttHistoricalServer.Repository
             s.ConnectionId = SqlHelper.GetInt(dr, "ConnectionId") ?? 0;
             s.TopicFilter = SqlHelper.GetString(dr, "TopicFilter");
             s.QoS = SqlHelper.GetInt(dr, "QoS") ?? 0;
+            s.Enabled = SqlHelper.GetBool(dr, "Enabled") ?? false;
             return s;
         }
 
         public static void Insert(SqlConnection c, Subscription s)
         {
-            var cmd = new SqlCommand("INSERT INTO [Subscriptions] ([ConnectionId], [TopicFilter], [QoS]) " +
-                "VALUES (@CONID,@TFIL,@QOS)", c);
+            var cmd = new SqlCommand("INSERT INTO [Subscriptions] ([ConnectionId], [TopicFilter], [QoS], [Enabled]) " +
+                "VALUES (@CONID,@TFIL,@QOS,@ENAB)", c);
             cmd.Parameters.Add(SqlHelper.CreateParam("@CONID", s.ConnectionId));
             cmd.Parameters.Add(SqlHelper.CreateParam("@TFIL", s.TopicFilter));
             cmd.Parameters.Add(SqlHelper.CreateParam("@QOS", s.QoS));
+            cmd.Parameters.Add(SqlHelper.CreateParam("@ENAB", s.Enabled));
             cmd.ExecuteNonQuery();
         }
 

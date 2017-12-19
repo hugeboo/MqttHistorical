@@ -11,6 +11,8 @@ System.Text.UTF8Encoding
 {"ResultCode":0,"Message":null}
 {"ResultCode":1,"Message":"Internal error"}
 
+=== Получение данных: ===
+
 Получить набор записей за интервал:
 Запрос: GET /payloads/<mqttserver>/<mqttuser>/<topicMask>?start=<timestamp1>&stop=<timestamp2>
 Ответ: {"Topics":[{"TopicName":"AAA", "Payloads":[{"Timestamp":111,"Data":"DDD"}]}],"ResultCode":0,"Message":null}
@@ -19,7 +21,23 @@ System.Text.UTF8Encoding
 Запрос: GET /payloads/<mqttserver>/<mqttuser>/<topicMask>?start=<timestamp1>&stop=<timestamp2>&last=1
 Ответ: {"Topics":[{"TopicName":"AAA", "Payloads":[{"Timestamp":111,"Data":"DDD"}]}],"ResultCode":0,"Message":null}
 
+=== Загрузка данных: ===
+
 Создать записи в топиках:
 Запрос: POST /payloads/<mqttserver>/<mqttuser>
 Тело запроса: {"Topics":[{"TopicName":"AAA", "Payloads":[{"Timestamp":111,"Data":"DDD"}]}]}
 Ответ: стандартный
+
+=== Админка: ===
+
+Получить всех пользователей:
+Запрос: GET /users
+Ответ: {"Users":[{"Id":1,"Name":"AAA","Password":"BBB","Enabled":1}],"ResultCode":0,"Message":null}
+
+Получить все подключения пользователя:
+Запрос: GET /connections?user=<id>
+Ответ: {"Connections":[{"Id":1,"UserId":1,"Server":"ZZZ","ConnectionUser":"YYY","Password":"XXX","Port":111,"SSLPort":222,"UseSSL":0,"Enabled":1}],"ResultCode":0,"Message":null}
+
+Получить все подписки подключения:
+Запрос: GET /subscriptions?conn=<id>
+Ответ: {"Subscriptions":[{"Id":1,"ConnectionId":1,"TopicFilter":"AAA","Qos":0,"Enabled":1}],"ResultCode":0,"Message":null}

@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 
+using MqttHistoricalUtils.Data;
+
 namespace MqttHistoricalServer.Repository
 {
-    internal sealed class Payload
+    internal static class PayloadHelper
     {
-        public int Id { get; set; }
-        public int TopicId { get; set; }
-        public long Timestamp { get; set; }
-        public string Data { get; set; }
-
         public static Payload Read(SqlDataReader dr)
         {
             var p = new Payload();

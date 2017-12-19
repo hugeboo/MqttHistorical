@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MqttHistoricalServer.Repository
 {
-    public sealed class SQLRepositorySettings : ICloneable
+    public sealed class SQLDBRepositorySettings : ICloneable
     {
         public string SQLServerAddr { get; set; }
         public int SQLServerPort { get; set; }
@@ -16,7 +16,7 @@ namespace MqttHistoricalServer.Repository
 
         public override bool Equals(object obj)
         {
-            var other = obj as SQLRepositorySettings;
+            var other = obj as SQLDBRepositorySettings;
             if (other == null) return false;
             return true;
         }
@@ -36,9 +36,9 @@ namespace MqttHistoricalServer.Repository
             return this.MemberwiseClone();
         }
 
-        public SQLRepositorySettings Clone2()
+        public SQLDBRepositorySettings Clone2()
         {
-            return Clone() as SQLRepositorySettings;
+            return Clone() as SQLDBRepositorySettings;
         }
     }
 }

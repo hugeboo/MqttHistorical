@@ -40,10 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Connection.cs" />
+    <Compile Include="Data\JsonConnectionsServerResponse.cs" />
     <Compile Include="Data\JsonServerResponse.cs" />
+    <Compile Include="Data\JsonSubscriptionsServerResponse.cs" />
     <Compile Include="Data\JsonTopicPayloadsServerResponse.cs" />
     <Compile Include="Data\JsonPayload.cs" />
     <Compile Include="Data\JsonTopicPayloads.cs" />
+    <Compile Include="Data\JsonUsersServerResponse.cs" />
+    <Compile Include="Data\Payload.cs" />
+    <Compile Include="Data\Subscription.cs" />
+    <Compile Include="Data\Topic.cs" />
+    <Compile Include="Data\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StaticValues.cs" />
     <Compile Include="Version.cs" />

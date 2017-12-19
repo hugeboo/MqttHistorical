@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 
+using MqttHistoricalUtils.Data;
+
 namespace MqttHistoricalServer.Repository
 {
-    internal sealed class Topic
+    internal static class TopicHelper
     {
-        public int Id { get; set; }
-        public int ConnectionId { get; set; }
-        public string Name { get; set; }
-
         public static Topic Read(SqlDataReader dr)
         {
             var t = new Topic();

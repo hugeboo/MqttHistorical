@@ -6,28 +6,28 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 
+using MqttHistoricalUtils.Data;
+
 namespace MqttHistoricalServer.Repository
 {
-    internal sealed class User
+    internal static class UserHelper
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Password { get; set; }
-
         public static User Read(SqlDataReader dr)
         {
             var u = new User();
             u.Id = SqlHelper.GetInt(dr, "Id") ?? 0;
             u.Name = SqlHelper.GetString(dr, "Name");
             u.Password = SqlHelper.GetString(dr, "Password");
+            u.Enabled = SqlHelper.GetBool(dr, "Enabled") ?? false;
             return u;
         }
 
         public static void Insert(SqlConnection c, User u)
         {
-            var cmd = new SqlCommand("INSERT INTO [Users] ([Name],[Password]) VALUES (@NAME,@PASS)", c);
+            var cmd = new SqlCommand("INSERT INTO [Users] ([Name],[Password],[Enabled]) VALUES (@NAME,@PASS,@ENAB)", c);
             cmd.Parameters.Add(SqlHelper.CreateParam("@NAME", u.Name));
             cmd.Parameters.Add(SqlHelper.CreateParam("@PASS", u.Password));
+            cmd.Parameters.Add(SqlHelper.CreateParam("@ENAB", u.Enabled));
             cmd.ExecuteNonQuery();
         }
 

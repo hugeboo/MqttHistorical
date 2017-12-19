@@ -12,6 +12,6 @@ namespace MqttHistoricalServer
     public sealed class DBWebServerSettings
     {
         public WebServerSettings WebServerSettings { get; set; }
-        public SQLRepositorySettings SQLRepositorySettings { get; set; }
+        public SQLDBRepositorySettings SQLRepositorySettings { get; set; }
     }
 }

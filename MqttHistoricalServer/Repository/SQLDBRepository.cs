@@ -8,31 +8,33 @@ using System.Data.SqlClient;
 using System.Xml.Serialization;
 using System.IO;
 
+using MqttHistoricalUtils.Data;
+
 namespace MqttHistoricalServer.Repository
 {
-    internal sealed class SQLRepository : IRepository
+    internal sealed class SQLDBRepository : IDBRepository
     {
         #region private fields
 
-        private SQLRepositorySettings _Settings;
+        private SQLDBRepositorySettings _Settings;
         private string _sConnectionString;
 
         #endregion
 
         #region Конструкторы
 
-        public SQLRepository(string settingsXmlFileName)
+        public SQLDBRepository(string settingsXmlFileName)
         {
             if (string.IsNullOrEmpty(settingsXmlFileName)) throw new ArgumentNullException();
-            var xml = new XmlSerializer(typeof(SQLRepositorySettings));
+            var xml = new XmlSerializer(typeof(SQLDBRepositorySettings));
             using (var sr = new StreamReader(settingsXmlFileName))
             {
-                _Settings = xml.Deserialize(sr) as SQLRepositorySettings;
+                _Settings = xml.Deserialize(sr) as SQLDBRepositorySettings;
             }
             _sConnectionString = MakeConnectionString(_Settings);
         }
 
-        public SQLRepository(SQLRepositorySettings settings)
+        public SQLDBRepository(SQLDBRepositorySettings settings)
         {
             if (settings == null) throw new ArgumentNullException();
             _Settings = settings;
@@ -60,42 +62,42 @@ namespace MqttHistoricalServer.Repository
 
         public void CreateConnection(Connection conn)
         {
-            Do(c => Connection.Insert(c, conn));
+            Do(c => ConnectionHelper.Insert(c, conn));
         }
 
         public void CreatePayload(Payload p)
         {
-            Do(c => Payload.Insert(c, p));
+            Do(c => PayloadHelper.Insert(c, p));
         }
 
         public void CreateSubscription(Subscription sub)
         {
-            Do(c => Subscription.Insert(c, sub));
+            Do(c => SubscriptionHelper.Insert(c, sub));
         }
 
         public void CreateTopic(Topic topic)
         {
-            Do(c => Topic.Insert(c, topic));
+            Do(c => TopicHelper.Insert(c, topic));
         }
 
         public void CreateUser(User user)
         {
-            Do(c => User.Insert(c, user));
+            Do(c => UserHelper.Insert(c, user));
         }
 
         public void DeleteConnection(int connId)
         {
-            Do(c => Connection.Delete(c, connId));
+            Do(c => ConnectionHelper.Delete(c, connId));
         }
 
         public void DeletePayloads(int topicId)
         {
-            Do(c => { Payload.DeleteAll(c, null, topicId); });
+            Do(c => { PayloadHelper.DeleteAll(c, null, topicId); });
         }
 
         public void DeleteSubscription(int subscriptionId)
         {
-            Do(c => Subscription.Delete(c, subscriptionId));
+            Do(c => SubscriptionHelper.Delete(c, subscriptionId));
         }
 
         public void DeleteTopic(int topicId)
@@ -103,80 +105,85 @@ namespace MqttHistoricalServer.Repository
             Do(c => 
             {
                 var t = c.BeginTransaction();
-                Payload.DeleteAll(c, t, topicId);
-                Topic.Delete(c, t, topicId);
+                PayloadHelper.DeleteAll(c, t, topicId);
+                TopicHelper.Delete(c, t, topicId);
                 t.Commit();
             });
         }
 
         public void DeleteUser(int userId)
         {
-            Do(c => User.Delete(c, userId));
+            Do(c => UserHelper.Delete(c, userId));
         }
 
         public Connection GetConnection(int connId)
         {
-            return Do(c => Connection.Select(c, connId));
+            return Do(c => ConnectionHelper.Select(c, connId));
+        }
+
+        public IEnumerable<Connection> GetConnections(int userId)
+        {
+            return Do(c => ConnectionHelper.SelectAllByUser(c, userId));
         }
 
         public IEnumerable<Connection> GetConnections(string userName)
         {
-            return Do(c => Connection.SelectAllByUser(c, userName));
+            return Do(c => ConnectionHelper.SelectAllByUser(c, userName));
         }
 
         public Payload GetPayload(string topicName, long? startTime, long? stopTime)
         {
-            return Do(c => Payload.SelectAllByTopicAndTimestampLast(c, topicName, startTime, stopTime));
+            return Do(c => PayloadHelper.SelectAllByTopicAndTimestampLast(c, topicName, startTime, stopTime));
         }
 
         public IEnumerable<Payload> GetPayloads(string topicName, long? startTime, long? stopTime)
         {
-            return Do(c => Payload.SelectAllByTopicAndTimestamp(c, topicName, startTime, stopTime));
+            return Do(c => PayloadHelper.SelectAllByTopicAndTimestamp(c, topicName, startTime, stopTime));
         }
 
         public Payload GetRecord(int recId)
         {
-            return Do(c => Payload.Select(c, recId));
+            return Do(c => PayloadHelper.Select(c, recId));
         }
 
         public Subscription GetSubscription(int subscriptionId)
         {
-            return Do(c => Subscription.Select(c, subscriptionId));
+            return Do(c => SubscriptionHelper.Select(c, subscriptionId));
         }
 
         public IEnumerable<Subscription> GetSubscriptions(int connId)
         {
-            return Do(c => Subscription.SelectAllByConnection(c, connId));
+            return Do(c => SubscriptionHelper.SelectAllByConnection(c, connId));
         }
 
         public Topic GetTopic(int topicId)
         {
-            return Do(c => Topic.Select(c, topicId));
+            return Do(c => TopicHelper.Select(c, topicId));
         }
 
         public Topic GetTopic(int connId, string topicName)
         {
-            return Do(c => Topic.Select(c, connId, topicName));
+            return Do(c => TopicHelper.Select(c, connId, topicName));
         }
 
         public IEnumerable<Topic> GetTopics(int connId)
         {
-            return Do(c => Topic.SelectAllByConnection(c, connId));
+            return Do(c => TopicHelper.SelectAllByConnection(c, connId));
         }
 
         public User GetUser(int userId)
         {
-            return Do(c => User.Select(c, userId));
+            return Do(c => UserHelper.Select(c, userId));
         }
 
         public User GetUser(string name)
         {
-            return Do(c => User.Select(c, name));
+            return Do(c => UserHelper.Select(c, name));
         }
 
         public IEnumerable<User> GetUsers()
         {
-            return Do(c => User.SelectAll(c));
+            return Do(c => UserHelper.SelectAll(c));
         }
 
         #endregion
@@ -205,7 +212,7 @@ namespace MqttHistoricalServer.Repository
             return res;
         }
 
-        private string MakeConnectionString(SQLRepositorySettings settings)
+        private string MakeConnectionString(SQLDBRepositorySettings settings)
         {
             if (String.IsNullOrEmpty(settings.User))
             {
