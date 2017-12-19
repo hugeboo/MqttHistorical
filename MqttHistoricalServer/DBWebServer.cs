@@ -26,7 +26,7 @@ namespace MqttHistoricalServer
         bool IAuthorizationVerifier.Verify(string userId, string password)
         {
             var user = Repository.GetUser(userId);
-            return user != null && user.Password == password;
+            return user != null && user.Enabled && user.Password == password;
         }
     }
 }

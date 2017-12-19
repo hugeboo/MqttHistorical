@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C61D382A-EE8B-4533-9A8D-B376F6E064F1}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MqttHistoricalSubscriber</RootNamespace>
-    <AssemblyName>MqttHistoricalSubscriber</AssemblyName>
+    <ProjectGuid>{51DF3FCC-622B-47AC-AD3F-2A81B7E7BADE}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MqttHistoricalServerConsole</RootNamespace>
+    <AssemblyName>MqttHistoricalServerConsole</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,7 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
+    <Reference Include="NLog, Version=3.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\NLog\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -43,16 +46,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DotKitREST\DotKit.RESTclient\DotKit.RESTclient.csproj">
-      <Project>{50f9c6a8-b6e1-4f5a-9db2-0f6cea104e01}</Project>
-      <Name>DotKit.RESTclient</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\DotKitREST\DotKit.RESTutils\DotKit.RESTutils.csproj">
-      <Project>{60492e50-637d-4b75-b677-c49130e612f6}</Project>
-      <Name>DotKit.RESTutils</Name>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MqttHistoricalServer\MqttHistoricalServer.csproj">
+      <Project>{b2965237-793a-437a-a7e5-11f586100ef4}</Project>
+      <Name>MqttHistoricalServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\MqttHistoricalUtils\MqttHistoricalUtils.csproj">
       <Project>{89e41f1f-9a3c-462a-a54a-08a23183c982}</Project>

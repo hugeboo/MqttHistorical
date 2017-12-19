@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MqttHistorical", "MqttHistorical\MqttHistorical.csproj", "{B68909E6-172A-4655-8EDD-D19C24BD83EA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotKit.RESTutils", "..\DotKitREST\DotKit.RESTutils\DotKit.RESTutils.csproj", "{60492E50-637D-4B75-B677-C49130E612F6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotKit.RESTserver", "..\DotKitREST\DotKit.RESTserver\DotKit.RESTserver.csproj", "{F1122E9C-ADD3-4D56-9C80-7AC19FE358A9}"
@@ -17,16 +15,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MqttHistoricalServer", "Mqt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MqttHistoricalSubscriber", "MqttHistoricalSubscriber\MqttHistoricalSubscriber.csproj", "{C61D382A-EE8B-4533-9A8D-B376F6E064F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MqttHistoricalServerConsole", "MqttHistoricalServerConsole\MqttHistoricalServerConsole.csproj", "{51DF3FCC-622B-47AC-AD3F-2A81B7E7BADE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MqttHistoricalSubscriberConsole", "MqttHistoricalSubscriberConsole\MqttHistoricalSubscriberConsole.csproj", "{8E30C57C-6BE8-4E32-8D74-A9781A7535B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B68909E6-172A-4655-8EDD-D19C24BD83EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B68909E6-172A-4655-8EDD-D19C24BD83EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B68909E6-172A-4655-8EDD-D19C24BD83EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B68909E6-172A-4655-8EDD-D19C24BD83EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{60492E50-637D-4B75-B677-C49130E612F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{60492E50-637D-4B75-B677-C49130E612F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60492E50-637D-4B75-B677-C49130E612F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +49,14 @@ Global
 		{C61D382A-EE8B-4533-9A8D-B376F6E064F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C61D382A-EE8B-4533-9A8D-B376F6E064F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C61D382A-EE8B-4533-9A8D-B376F6E064F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51DF3FCC-622B-47AC-AD3F-2A81B7E7BADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51DF3FCC-622B-47AC-AD3F-2A81B7E7BADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51DF3FCC-622B-47AC-AD3F-2A81B7E7BADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51DF3FCC-622B-47AC-AD3F-2A81B7E7BADE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E30C57C-6BE8-4E32-8D74-A9781A7535B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E30C57C-6BE8-4E32-8D74-A9781A7535B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E30C57C-6BE8-4E32-8D74-A9781A7535B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E30C57C-6BE8-4E32-8D74-A9781A7535B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

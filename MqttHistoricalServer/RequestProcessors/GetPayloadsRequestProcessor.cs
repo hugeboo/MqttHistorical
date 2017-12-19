@@ -75,7 +75,7 @@ namespace MqttHistoricalServer.RequestProcessors
                 if (!long.TryParse(s, out d) || d < 0)
                 {
                     response.ResultCode = JsonResultCode.InvalidRequest;
-                    response.Message = "bad start";
+                    response.Message = "Bad start arg";
                 }
                 startTs = d;
             }
@@ -84,14 +84,14 @@ namespace MqttHistoricalServer.RequestProcessors
                 if (!long.TryParse(s, out d) || d < 0)
                 {
                     response.ResultCode = JsonResultCode.InvalidRequest;
-                    response.Message = "bad stop";
+                    response.Message = "Bad stop arg";
                 }
                 stopTs = d;
             }
             if (startTs > stopTs)
             {
                 response.ResultCode = JsonResultCode.InvalidRequest;
-                response.Message = "start>stop";
+                response.Message = "start > stop";
             }
 
             if (response.ResultCode != JsonResultCode.OK) return response;

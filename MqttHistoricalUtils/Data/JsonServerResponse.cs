@@ -38,6 +38,11 @@ namespace MqttHistoricalUtils.Data
         /// <summary>
         /// Указанного подключения к Mqtt-брокеру не найдено
         /// </summary>
-        MqttConnectionNotFound
+        MqttConnectionNotFound,
+
+        /// <summary>
+        /// Указанное подключение к Mqtt-брокеру выключено
+        /// </summary>
+        MqttConnectionDisabled
     }
 }

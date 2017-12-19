@@ -36,7 +36,7 @@ namespace MqttHistoricalServer.RequestProcessors
             if (!parameters.TryGetValue("user", out string s) || !int.TryParse(s, out userId))
             {
                 response.ResultCode = JsonResultCode.InvalidRequest;
-                response.Message = "Missing user";
+                response.Message = "Missing user arg";
                 return response;
             }
 

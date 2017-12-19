@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C61D382A-EE8B-4533-9A8D-B376F6E064F1}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MqttHistoricalSubscriber</RootNamespace>
-    <AssemblyName>MqttHistoricalSubscriber</AssemblyName>
+    <ProjectGuid>{8E30C57C-6BE8-4E32-8D74-A9781A7535B2}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MqttHistoricalSubscriberConsole</RootNamespace>
+    <AssemblyName>MqttHistoricalSubscriberConsole</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,16 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DotKitREST\DotKit.RESTclient\DotKit.RESTclient.csproj">
-      <Project>{50f9c6a8-b6e1-4f5a-9db2-0f6cea104e01}</Project>
-      <Name>DotKit.RESTclient</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\DotKitREST\DotKit.RESTutils\DotKit.RESTutils.csproj">
-      <Project>{60492e50-637d-4b75-b677-c49130e612f6}</Project>
-      <Name>DotKit.RESTutils</Name>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MqttHistoricalSubscriber\MqttHistoricalSubscriber.csproj">
+      <Project>{c61d382a-ee8b-4533-9a8d-b376f6e064f1}</Project>
+      <Name>MqttHistoricalSubscriber</Name>
     </ProjectReference>
     <ProjectReference Include="..\MqttHistoricalUtils\MqttHistoricalUtils.csproj">
       <Project>{89e41f1f-9a3c-462a-a54a-08a23183c982}</Project>
