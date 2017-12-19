@@ -1,0 +1,25 @@
+﻿Общий префикс для всех команд:
+<domain>/mqttdb/v1
+
+Используется аутентификация:
+Authorization: Basic dGVzdHVzZXI6MTIzNDU2Nzg= (эта строка получается путем <UserId>:<Password> ---> to base64)
+
+Кодировка контента:
+System.Text.UTF8Encoding
+
+Стандартные ответы сервера:
+{"ResultCode":0,"Message":null}
+{"ResultCode":1,"Message":"Internal error"}
+
+Получить набор записей за интервал:
+Запрос: GET /payloads/<mqttserver>/<mqttuser>/<topicMask>?start=<timestamp1>&stop=<timestamp2>
+Ответ: {"Topics":[{"TopicName":"AAA", "Payloads":[{"Timestamp":111,"Data":"DDD"}]}],"ResultCode":0,"Message":null}
+
+Получить только последнюю запись за интервал:
+Запрос: GET /payloads/<mqttserver>/<mqttuser>/<topicMask>?start=<timestamp1>&stop=<timestamp2>&last=1
+Ответ: {"Topics":[{"TopicName":"AAA", "Payloads":[{"Timestamp":111,"Data":"DDD"}]}],"ResultCode":0,"Message":null}
+
+Создать записи в топиках:
+Запрос: POST /payloads/<mqttserver>/<mqttuser>
+Тело запроса: {"Topics":[{"TopicName":"AAA", "Payloads":[{"Timestamp":111,"Data":"DDD"}]}]}
+Ответ: стандартный
