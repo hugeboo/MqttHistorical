@@ -49,8 +49,8 @@ namespace MqttHistoricalServer.Repository
 
             var cmd = new SqlCommand(cmds, c);
             cmd.Parameters.Add(SqlHelper.CreateParam("@TNAME", topicName));
-            cmd.Parameters.Add(SqlHelper.CreateParam("@START", startTs));
-            cmd.Parameters.Add(SqlHelper.CreateParam("@STOP", stopTs));
+            if (startTs.HasValue) cmd.Parameters.Add(SqlHelper.CreateParam("@START", startTs));
+            if (stopTs.HasValue) cmd.Parameters.Add(SqlHelper.CreateParam("@STOP", stopTs));
             using (var dr = cmd.ExecuteReader())
             {
                 while (dr.Read())
@@ -84,8 +84,8 @@ namespace MqttHistoricalServer.Repository
 
             var cmd = new SqlCommand(cmds, c);
             cmd.Parameters.Add(SqlHelper.CreateParam("@TNAME", topicName));
-            cmd.Parameters.Add(SqlHelper.CreateParam("@START", startTs));
-            cmd.Parameters.Add(SqlHelper.CreateParam("@STOP", stopTs));
+            if (startTs.HasValue) cmd.Parameters.Add(SqlHelper.CreateParam("@START", startTs));
+            if (stopTs.HasValue) cmd.Parameters.Add(SqlHelper.CreateParam("@STOP", stopTs));
             using (var dr = cmd.ExecuteReader())
             {
                 while (dr.Read())

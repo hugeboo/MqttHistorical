@@ -11,7 +11,7 @@ using MqttHistoricalServer.RequestProcessors;
 
 namespace MqttHistoricalServer
 {
-    internal sealed class DBAdminWebServer : DBWebServer, IAuthorizationVerifier
+    public sealed class DBAdminWebServer : DBWebServer, IAuthorizationVerifier
     {
         public DBAdminWebServer(DBWebServerSettings settings)
             :base(settings)

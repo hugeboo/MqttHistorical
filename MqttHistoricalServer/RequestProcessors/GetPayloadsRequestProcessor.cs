@@ -102,6 +102,7 @@ namespace MqttHistoricalServer.RequestProcessors
             if (conn == null)
             {
                 response.ResultCode = JsonResultCode.MqttConnectionNotFound;
+                response.Message = "Mqtt server/user '" + mqttServer + "/" + mqttUser + "' not found";
             }
             else
             {

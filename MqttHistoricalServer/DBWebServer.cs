@@ -11,7 +11,7 @@ using MqttHistoricalServer.RequestProcessors;
 
 namespace MqttHistoricalServer
 {
-    internal class DBWebServer : WebServer, IAuthorizationVerifier
+    public class DBWebServer : WebServer, IAuthorizationVerifier
     {
         public IDBRepository Repository { get; private set; }
 

@@ -12,7 +12,7 @@ using MqttHistoricalUtils.Data;
 
 namespace MqttHistoricalServer.Repository
 {
-    internal sealed class SQLDBRepository : IDBRepository
+    public sealed class SQLDBRepository : IDBRepository
     {
         #region private fields
 

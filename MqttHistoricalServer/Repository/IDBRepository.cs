@@ -8,7 +8,7 @@ using MqttHistoricalUtils.Data;
 
 namespace MqttHistoricalServer.Repository
 {
-    internal interface IDBRepository
+    public interface IDBRepository
     {
         #region Работа с пользователями
 
