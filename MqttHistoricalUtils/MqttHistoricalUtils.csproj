@@ -53,10 +53,17 @@
     <Compile Include="Data\Topic.cs" />
     <Compile Include="Data\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requests\GetConnectionsServerRequest.cs" />
+    <Compile Include="Requests\GetSubscriptionsServerRequest.cs" />
+    <Compile Include="Requests\GetUsersServerRequest.cs" />
     <Compile Include="StaticValues.cs" />
     <Compile Include="Version.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DotKitREST\DotKit.RESTclient\DotKit.RESTclient.csproj">
+      <Project>{50f9c6a8-b6e1-4f5a-9db2-0f6cea104e01}</Project>
+      <Name>DotKit.RESTclient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DotKitREST\DotKit.RESTutils\DotKit.RESTutils.csproj">
       <Project>{60492e50-637d-4b75-b677-c49130e612f6}</Project>
       <Name>DotKit.RESTutils</Name>
