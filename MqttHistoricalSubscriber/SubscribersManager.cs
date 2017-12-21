@@ -86,7 +86,7 @@ namespace MqttHistoricalSubscriber
                 {
                     if (!_dictSubscribers.TryGetValue(kvp.Key, out Subscriber s))
                     {
-                        s = new Subscriber(kvp.Value);
+                        s = new Subscriber(kvp.Value, _RESTRequestSettings);
                         _dictSubscribers[kvp.Key] = s;
                     }
                     else

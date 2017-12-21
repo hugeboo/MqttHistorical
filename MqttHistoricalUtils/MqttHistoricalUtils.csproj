@@ -56,6 +56,7 @@
     <Compile Include="Requests\GetConnectionsServerRequest.cs" />
     <Compile Include="Requests\GetSubscriptionsServerRequest.cs" />
     <Compile Include="Requests\GetUsersServerRequest.cs" />
+    <Compile Include="Requests\PostPayloadsServerRequest.cs" />
     <Compile Include="StaticValues.cs" />
     <Compile Include="Version.cs" />
   </ItemGroup>

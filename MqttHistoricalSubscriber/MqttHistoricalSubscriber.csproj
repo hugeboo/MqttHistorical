@@ -57,6 +57,10 @@
       <Project>{60492e50-637d-4b75-b677-c49130e612f6}</Project>
       <Name>DotKit.RESTutils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StriderMqtt\StriderMqtt\StriderMqtt.csproj">
+      <Project>{401f8570-672e-43b5-9a52-5fb5cf0a3ac9}</Project>
+      <Name>StriderMqtt</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MqttHistoricalUtils\MqttHistoricalUtils.csproj">
       <Project>{89e41f1f-9a3c-462a-a54a-08a23183c982}</Project>
       <Name>MqttHistoricalUtils</Name>
