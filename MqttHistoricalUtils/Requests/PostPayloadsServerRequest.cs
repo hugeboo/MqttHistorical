@@ -18,7 +18,7 @@ namespace MqttHistoricalUtils.Requests
         {
         }
 
-        public JsonServerResponse Execute(string server, string user, JsonTopicPayloads req)
+        public JsonServerResponse Execute(string server, string user, JsonTopicPayloads[] req)
         {
             return this.Execute(Path + "/" + server + "/" + user, req);
         }

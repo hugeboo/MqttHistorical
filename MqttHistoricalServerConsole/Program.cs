@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using NLog;
+
 using DotKit.RESTserver;
 using MqttHistoricalServer;
 using MqttHistoricalServer.Repository;
@@ -14,6 +16,8 @@ namespace MqttHistoricalServerConsole
     {
         private static DBWebServer _WebServer;
         private static DBAdminWebServer _AdminWebServer;
+
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         static void Main(string[] args)
         {
@@ -59,7 +63,7 @@ namespace MqttHistoricalServerConsole
             }
             catch (Exception ex)
             {
-                Console.WriteLine("EXCEPTION: " + ex.Message);
+                logger.Error("Error in main", ex);
             }
             finally
             {

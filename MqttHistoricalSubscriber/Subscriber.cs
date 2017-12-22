@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+using NLog;
+
 using StriderMqtt;
 using DotKit.RESTclient;
 using MqttHistoricalUtils.Data;
@@ -15,15 +17,35 @@ namespace MqttHistoricalSubscriber
     internal sealed class Subscriber : IDisposable
     {
         private Thread _worker;
-        private readonly object _syncObj = new object();
         private ConnectionInfo _connectionInfo;
         private RequestSettings _RESTRequestSettings;
+
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        public bool IsAlive
+        {
+            get
+            {
+                var w = _worker;
+                return w != null && w.IsAlive;
+            }
+        }
+
+        public string Key
+        {
+            get
+            {
+                var c = _connectionInfo;
+                return c != null ? c.Key : "";
+            }
+        }
 
         public Subscriber(ConnectionInfo ci, RequestSettings restTRequestSettings)
         {
             _connectionInfo = ci;
-            _RESTRequestSettings = restTRequestSettings;
-            StartWorker();
+            _RESTRequestSettings = restTRequestSettings.Clone() as RequestSettings;
+            _RESTRequestSettings.UserId = _connectionInfo?.UserName;
+            Update(_connectionInfo);
         }
 
         public void Dispose()
@@ -33,21 +55,36 @@ namespace MqttHistoricalSubscriber
 
         public void Update(ConnectionInfo ci)
         {
-            //...
+            if (!Equals(_connectionInfo, ci))
+            {
+                _connectionInfo = ci;
+                _RESTRequestSettings.UserId = _connectionInfo?.UserName;
+                StopWorker();
+                if (_connectionInfo != null)
+                {
+                    StartWorker();
+                }
+            }
+            else if (!IsAlive)
+            {
+                if (_connectionInfo != null) StartWorker();
+            }
         }
 
         private void StartWorker()
         {
+            logger.Info("Start: " + Key);
             _worker = new Thread(WorkerThreadProc);
             _worker.Start();
         }
 
         private void StopWorker()
         {
+            logger.Info("Stop: " + Key);
             try { _worker.Abort(); } catch { }
         }
 
-        private void WorkerThreadProc() // !!!! нужен реконнект
+        private void WorkerThreadProc()
         {
             try
             {
@@ -71,18 +108,31 @@ namespace MqttHistoricalSubscriber
                     conn.Connect();
 
                     conn.PublishReceived += HandlePublishReceived;
-                    conn.Subscribe(new string[] { "my/subscription/topic" },
-                        new MqttQos[] { MqttQos.AtMostOnce });
+
+                    if (_connectionInfo.Subscriptions != null)
+                    {
+                        foreach (var s in _connectionInfo.Subscriptions)
+                        {
+                            logger.Info($"Subscribe: {Key} -> {s.TopicFilter}, {s.QoS}");
+                            conn.Subscribe(s.TopicFilter, (MqttQos)s.QoS);
+                        }
+                    }
 
                     while (conn.Loop())
                     {
                         // etc...
                     }
+
+                    logger.Warn("Disconnected: " + Key);
                 }
+            }
+            catch (ThreadAbortException)
+            {
+                logger.Info("Aborted: " + Key);
             }
             catch (Exception ex)
             {
-                //...
+                logger.Error("Error in WorkerProc", ex);
             }
         }
 
@@ -90,20 +140,24 @@ namespace MqttHistoricalSubscriber
         {
             try
             {
-                // !!!! убрать retain ???
+                if (e.Retain) return;
 
                 var data = Encoding.UTF8.GetString(e.Message ?? new byte[0]);
 
                 var p = new JsonTopicPayloads()
                 {
                     TopicName = e.Topic,
-                    Payloads = new[] { new JsonPayload() { Timestamp = DateTime.Now.ToBinary(), Data = data } }
+                    Payloads = new[] { new JsonPayload() { Timestamp = DateTime.Now.Ticks, Data = data } }
                 };
 
-                var response = new PostPayloadsServerRequest(_RESTRequestSettings).
-                    Execute(_connectionInfo.Connection.Server, _connectionInfo.Connection.ConnectionUser, p);
+                var req = new PostPayloadsServerRequest(_RESTRequestSettings);
+                var response = req.Execute(_connectionInfo.Connection.Server, _connectionInfo.Connection.ConnectionUser, new[] { p });
 
-                if (response.ResultCode != JsonResultCode.OK)
+                if (response == null)
+                {
+                    throw new ApplicationException(req.LastError);
+                }
+                else if (response.ResultCode != JsonResultCode.OK)
                 {
                     throw new ApplicationException($"responseResultCode={response.ResultCode.ToString()}, '{response.Message}'");
                 }
@@ -111,7 +165,7 @@ namespace MqttHistoricalSubscriber
             }
             catch (Exception ex)
             {
-                //...
+                logger.Error("Error in HandlePublishReceived", ex);
             }
         }
     }

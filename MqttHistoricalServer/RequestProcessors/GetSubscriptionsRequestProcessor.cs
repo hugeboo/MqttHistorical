@@ -32,17 +32,17 @@ namespace MqttHistoricalServer.RequestProcessors
         {
             var response = new JsonSubscriptionsServerResponse();
 
-            int userId;
-            if (!parameters.TryGetValue("user", out string s) || !int.TryParse(s, out userId))
+            int connId;
+            if (!parameters.TryGetValue("conn", out string s) || !int.TryParse(s, out connId))
             {
                 response.ResultCode = JsonResultCode.InvalidRequest;
-                response.Message = "Missing user arg";
+                response.Message = "Missing conn arg";
                 return response;
             }
 
             var rep = (WebServer as DBWebServer).Repository;
 
-            var conn = rep.GetSubscriptions(userId);
+            var conn = rep.GetSubscriptions(connId);
             response.Subscriptions = conn.ToArray();
 
             return response;

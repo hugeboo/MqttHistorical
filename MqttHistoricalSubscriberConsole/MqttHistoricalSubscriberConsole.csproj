@@ -47,11 +47,27 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DotKitREST\DotKit.RESTclient\DotKit.RESTclient.csproj">
+      <Project>{50f9c6a8-b6e1-4f5a-9db2-0f6cea104e01}</Project>
+      <Name>DotKit.RESTclient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MqttHistoricalSubscriber\MqttHistoricalSubscriber.csproj">
       <Project>{c61d382a-ee8b-4533-9a8d-b376f6e064f1}</Project>
       <Name>MqttHistoricalSubscriber</Name>

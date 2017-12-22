@@ -17,5 +17,25 @@ namespace MqttHistoricalUtils.Data
         public int SSLPort { get; set; }
         public bool UseSSL { get; set; }
         public bool Enabled { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as Connection;
+            if (other == null) return false;
+            return Id == other.Id &&
+                   UserId == other.UserId &&
+                   Server == other.Server &&
+                   ConnectionUser == other.ConnectionUser &&
+                   Password == other.Password &&
+                   Port == other.Port &&
+                   SSLPort == other.SSLPort &&
+                   UseSSL == other.UseSSL &&
+                   Enabled == other.Enabled;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id;
+        }
     }
 }

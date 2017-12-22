@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
+using NLog;
+
 using DotKit.RESTclient;
 using MqttHistoricalUtils;
 using MqttHistoricalUtils.Data;
@@ -20,8 +22,11 @@ namespace MqttHistoricalSubscriber
         private bool _bDisposed;
         private RequestSettings _RESTRequestSettings;
 
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public SubscribersManager(RequestSettings restRequestSettings)
         {
+            logger.Info("Starting");
             _RESTRequestSettings = restRequestSettings;
             _Timer = new Timer(TimerProc, null, 1, Timeout.Infinite);
         }
@@ -31,6 +36,7 @@ namespace MqttHistoricalSubscriber
             if (!_bDisposed)
             {
                 _bDisposed = true;
+                logger.Info("Disposing");
                 lock (_syncObj)
                 {
                     try { _Timer.Dispose(); } catch { }
@@ -55,11 +61,11 @@ namespace MqttHistoricalSubscriber
             }
             catch (Exception ex)
             {
-                //...
+                logger.Error("TimerProc exception", ex);
             }
             finally
             {
-                try { _Timer.Change(60000, Timeout.Infinite); } catch { }
+                try { _Timer.Change(20000, Timeout.Infinite); } catch { }
             }
         }
 
@@ -67,10 +73,11 @@ namespace MqttHistoricalSubscriber
         {
             lock (_syncObj)
             {
-                foreach(var kvp in _dictSubscribers.ToArray())
+                foreach (var kvp in _dictSubscribers.ToArray())
                 {
                     if (!dictConns.ContainsKey(kvp.Key))
                     {
+                        logger.Info("Remove subscriber: " + kvp.Key);
                         _dictSubscribers.Remove(kvp.Key);
                         kvp.Value.Dispose();
                     }
@@ -82,10 +89,11 @@ namespace MqttHistoricalSubscriber
         {
             lock (_syncObj)
             {
-                foreach(var kvp in dictConns)
+                foreach (var kvp in dictConns)
                 {
                     if (!_dictSubscribers.TryGetValue(kvp.Key, out Subscriber s))
                     {
+                        logger.Info("Add subscriber: " + kvp.Key);
                         s = new Subscriber(kvp.Value, _RESTRequestSettings);
                         _dictSubscribers[kvp.Key] = s;
                     }
@@ -99,19 +107,29 @@ namespace MqttHistoricalSubscriber
 
         private Dictionary<string, ConnectionInfo> GetAllConnectionsFromServer()
         {
-            var users = new GetUsersServerRequest(_RESTRequestSettings).Execute();
-            if (users.ResultCode != JsonResultCode.OK)
+            var usreq = new GetUsersServerRequest(_RESTRequestSettings);
+            var users = usreq.Execute();
+            if (users == null)
+            {
+                throw new ApplicationException(usreq.LastError);
+            }
+            else if (users.ResultCode != JsonResultCode.OK)
             {
                 throw new ApplicationException($"usersResultCode={users.ResultCode.ToString()}, '{users.Message}'");
             }
 
             var dictConns = new Dictionary<string, ConnectionInfo>();
-            foreach(var user in users.Users)
+            foreach (var user in users.Users)
             {
                 if (user.Enabled)
                 {
-                    var uconns = new GetConnectionsServerRequest(_RESTRequestSettings).Execute(user.Id);
-                    if (uconns.ResultCode != JsonResultCode.OK)
+                    var ureq = new GetConnectionsServerRequest(_RESTRequestSettings);
+                    var uconns = ureq.Execute(user.Id);
+                    if (uconns == null)
+                    {
+                        throw new ApplicationException(ureq.LastError);
+                    }
+                    else if (uconns.ResultCode != JsonResultCode.OK)
                     {
                         throw new ApplicationException($"uconnsResultCode={uconns.ResultCode.ToString()}, '{uconns.Message}'");
                     }
@@ -119,14 +137,19 @@ namespace MqttHistoricalSubscriber
                     {
                         if (conn.Enabled)
                         {
-                            var ci = new ConnectionInfo() { Connection = conn };
+                            var ci = new ConnectionInfo() { UserName = user.Name, Connection = conn };
                             dictConns[ci.Key] = ci;
-                            var csubs = new GetSubscriptionsServerRequest(_RESTRequestSettings).Execute(conn.Id);
-                            if (csubs.ResultCode != JsonResultCode.OK)
+                            var creq = new GetSubscriptionsServerRequest(_RESTRequestSettings);
+                            var csubs = creq.Execute(conn.Id);
+                            if (csubs == null)
+                            {
+                                throw new ApplicationException(creq.LastError);
+                            }
+                            else if (csubs.ResultCode != JsonResultCode.OK)
                             {
                                 throw new ApplicationException($"csubsResultCode={csubs.ResultCode.ToString()}, '{csubs.Message}'");
                             }
-                            var a=csubs.Subscriptions.Where(s => s.Enabled).ToArray();
+                            var a = csubs.Subscriptions.Where(s => s.Enabled).OrderBy(s => s.Id).ToArray();
                             ci.Subscriptions = csubs.Subscriptions.Where(s => s.Enabled).ToArray();
                         }
                     }
