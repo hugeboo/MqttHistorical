@@ -144,10 +144,12 @@ namespace MqttHistoricalSubscriber
 
                 var data = Encoding.UTF8.GetString(e.Message ?? new byte[0]);
 
+                logger.Debug($"PublishReceived: {e.Topic} '{data}'");
+
                 var p = new JsonTopicPayloads()
                 {
                     TopicName = e.Topic,
-                    Payloads = new[] { new JsonPayload() { Timestamp = DateTime.Now.Ticks, Data = data } }
+                    Payloads = new[] { new JsonPayload() { Timestamp = DateTime.UtcNow.Ticks, Data = data } }
                 };
 
                 var req = new PostPayloadsServerRequest(_RESTRequestSettings);
