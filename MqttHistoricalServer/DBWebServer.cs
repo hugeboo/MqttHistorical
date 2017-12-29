@@ -20,6 +20,8 @@ namespace MqttHistoricalServer
             Repository = new SQLDBRepository(settings.SQLRepositorySettings);
             this.AuthorizationVerifier = this;
             this.Settings = settings.WebServerSettings;
+            this.RegisterRequestProcessor(typeof(GetMyConnectionsRequestProcessor));
+            this.RegisterRequestProcessor(typeof(GetMyTopicsRequestProcessor));
             this.RegisterRequestProcessor(typeof(GetPayloadsRequestProcessor));
         }
 

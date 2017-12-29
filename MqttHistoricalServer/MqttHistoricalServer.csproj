@@ -58,6 +58,8 @@
     <Compile Include="Repository\TopicHelper.cs" />
     <Compile Include="Repository\UserHelper.cs" />
     <Compile Include="RequestProcessors\GetConnectionsRequestProcessor.cs" />
+    <Compile Include="RequestProcessors\GetMyConnectionsRequestProcessor.cs" />
+    <Compile Include="RequestProcessors\GetMyTopicsRequestProcessor.cs" />
     <Compile Include="RequestProcessors\GetPayloadsRequestProcessor.cs" />
     <Compile Include="RequestProcessors\GetSubscriptionsRequestProcessor.cs" />
     <Compile Include="RequestProcessors\GetUsersRequestProcessor.cs" />

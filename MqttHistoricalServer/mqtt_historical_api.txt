@@ -13,6 +13,14 @@ System.Text.UTF8Encoding
 
 === Получение данных: ===
 
+Получить все подключения текущего пользователя:
+Запрос: GET /connections
+Ответ: {"Connections":[{"Id":1,"UserId":1,"Server":"ZZZ","ConnectionUser":"YYY","Password":"XXX","Port":111,"SSLPort":222,"UseSSL":0,"Enabled":1}],"ResultCode":0,"Message":null}
+
+Получить все топики подключения текущего пользователя:
+Запрос: GET /topics?conn=<id>
+Ответ: {"Topics":[{"Id":1,"ConnectionId":1,"Name":"AAA"}],"ResultCode":0,"Message":null}
+
 Получить набор записей за интервал:
 Запрос: GET /payloads/<mqttserver>/<mqttuser>/<topicMask>?start=<timestamp1>&stop=<timestamp2>
 Ответ: {"Topics":[{"TopicName":"AAA", "Payloads":[{"Timestamp":111,"Data":"DDD"}]}],"ResultCode":0,"Message":null}

@@ -47,6 +47,7 @@
     <Compile Include="Data\JsonTopicPayloadsServerResponse.cs" />
     <Compile Include="Data\JsonPayload.cs" />
     <Compile Include="Data\JsonTopicPayloads.cs" />
+    <Compile Include="Data\JsonTopicsServerResponse.cs" />
     <Compile Include="Data\JsonUsersServerResponse.cs" />
     <Compile Include="Data\Payload.cs" />
     <Compile Include="Data\Subscription.cs" />
@@ -54,6 +55,8 @@
     <Compile Include="Data\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\GetConnectionsServerRequest.cs" />
+    <Compile Include="Requests\GetMyConnectionsServerRequest.cs" />
+    <Compile Include="Requests\GetMyTopicsServerRequest.cs" />
     <Compile Include="Requests\GetSubscriptionsServerRequest.cs" />
     <Compile Include="Requests\GetUsersServerRequest.cs" />
     <Compile Include="Requests\PostPayloadsServerRequest.cs" />
